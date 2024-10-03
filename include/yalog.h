@@ -1,6 +1,10 @@
 #ifndef __YALOG_H
 #define __YALOG_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -53,5 +57,9 @@ void yalog_log(const log_level_t level, //
     yalog_log(LOG_ERROR, __FILE_NAME__, __LINE__, fmt, __VA_ARGS__)
 #define YALOG_FATAL_F(fmt, ...)                                                \
     yalog_log(LOG_FATAL, __FILE_NAME__, __LINE__, fmt, __VA_ARGS__)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // !__YALOG_H
