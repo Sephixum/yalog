@@ -1,4 +1,4 @@
-#include "yalog.h"
+#include "../include/yalog.h"
 
 #define RESET "\033[0m"
 #define BOLD "\033[1m"
@@ -78,7 +78,7 @@ static void write_to_stream(log_event_t *event) {
             event->file,                                 //
             event->line                                  //
     );
-    vfprintf(stdout, event->format, event->argument_list);
+    vfprintf(event->stream, event->format, event->argument_list);
     fprintf(stdout, "\n");
     fflush(stdout);
 }
@@ -106,19 +106,12 @@ void yalog_log(const log_level_t level, //
     };
     initialize_event_time(&event);
 
-    switch (level) {
-    case LOG_WARN:
-    case LOG_ERROR:
-    case LOG_FATAL:
-        event.stream = stderr;
-        break;
-
-    default:
-        event.stream = stdout;
-    }
+    event.stream =
+        (level == LOG_WARN || level == LOG_ERROR || level == LOG_FATAL)
+            ? stderr
+            : stdout;
 
     va_start(event.argument_list, format);
-    va_end(event.argument_list);
-
     write_to_stream(&event);
+    va_end(event.argument_list);
 }
