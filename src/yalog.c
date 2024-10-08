@@ -48,7 +48,7 @@ static const char *log_level_to_color(log_level_t level) {
 }
 
 static void write_to_stream(log_event_t *event) {
-    char buffer[16] = {0};
+    char buffer[32] = {0};
     size_t written_string_size = //
         strftime(buffer,         //
                  sizeof(buffer), //
