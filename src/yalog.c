@@ -1,4 +1,5 @@
 #include "../include/yalog.h"
+#include <pthread.h>
 
 #define RESET "\033[0m"
 #define BOLD "\033[1m"
@@ -24,6 +25,8 @@
  *
  */
 
+static pthread_mutex_t log_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 static const char *log_level_strings[] = {
     "TRACE", //
     "DEBUG", //
@@ -48,6 +51,8 @@ static const char *log_level_to_color(log_level_t level) {
 }
 
 static void write_to_stream(log_event_t *event) {
+    pthread_mutex_lock(&log_mutex);
+
     char buffer[32] = {0};
     size_t written_string_size = //
         strftime(buffer,         //
@@ -81,6 +86,8 @@ static void write_to_stream(log_event_t *event) {
     vfprintf(event->stream, event->format, event->argument_list);
     fprintf(stdout, "\n");
     fflush(stdout);
+
+    pthread_mutex_unlock(&log_mutex);
 }
 
 static void initialize_event_time(log_event_t *event) {
