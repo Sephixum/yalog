@@ -61,17 +61,8 @@ static void write_to_stream(log_event_t *event) {
                  event->time     //
         );
 
-    if (!written_string_size) {
-        fprintf(stderr, "strftime failed.");
-    }
-
     /* *
-     * Since strftime does not add a terminating
-     * character we manually add it to the buffer.
-     * The written_string_size variable is the number
-     * of characters written to buffer which is used
-     * to point to last index of the buffer.
-     *
+     * Adding terminating char.
      */
     buffer[written_string_size] = '\0';
 
